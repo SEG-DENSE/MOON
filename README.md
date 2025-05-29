@@ -10,6 +10,7 @@ To comprehensively evaluate the effectiveness of Moon and compare it against oth
 
 Details of all benchmarks can be found in *artifact/util/benchmark.py*, including their names and jar paths for analysis.
 
+[**Update:**] the details of benchmarks, including the LOC(line of code), reachable methods and reachable method invocations can be found in *artifact/benchmarks/benchmark_details.csv*.
 ## 2. Getting Started Guide
 
 ### 2.1 Directory Structure

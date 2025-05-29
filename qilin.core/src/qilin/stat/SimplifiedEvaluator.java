@@ -65,12 +65,14 @@ public class SimplifiedEvaluator implements IEvaluator {
         }
         int totalPolyCalls = 0;
         int totalCastsMayFail = 0;
+        int methodCalls = 0;
         for (SootMethod sm : reachableMethods) {
             // All the statements in the method
             for (Unit unit : PTAUtils.getMethodBody(sm).getUnits()) {
                 Stmt st = (Stmt) unit;
                 // virtual calls
                 if (st.containsInvokeExpr()) {
+                    methodCalls++;
                     InvokeExpr ie = st.getInvokeExpr();
                     if (!(ie instanceof StaticInvokeExpr)) {
                         // Virtual, Special or Instance
@@ -111,6 +113,7 @@ public class SimplifiedEvaluator implements IEvaluator {
 //        aliasStat.aliasesProcessing();
         exporter.collectMetric("#May Fail Cast (Total):", String.valueOf(totalCastsMayFail));
         exporter.collectMetric("#Virtual Call Site(Polymorphic):", String.valueOf(totalPolyCalls));
+        exporter.collectMetric("#Total method calls:", String.valueOf(methodCalls));
 //        exporter.collectMetric("#globalAlias_incstst:", String.valueOf(aliasStat.getGlobalAliasesIncludingStSt()));
         ptsStat();
     }
