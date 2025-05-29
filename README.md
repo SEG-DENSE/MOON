@@ -1,5 +1,9 @@
 # Towards a Theoretically-Backed and Practical Framework for Selective Object-Sensitive Pointer Analysis (Artifact Document)
 
+## 0. Update
+<span style="color:red"><b>[UPDATE1:]</b></span> Details of the benchmarks—including LOC, Functions and Calls—can be found in updatedData/benchmark_details.csv.
+
+<span style="color:red"><b>[UPDATE2:]</b></span> Experimental results for all stages of the analysis are available in updatedData/experiment_results.pdf, which includes the three updated tables.
 ## 1. Introduction
 
 This artifact supports reproducing the results of all research questions (RQ1-RQ4) in Section 6 of our paper, including all associated tables and figures.
@@ -9,8 +13,6 @@ To comprehensively evaluate the effectiveness of Moon and compare it against oth
 ### 1.1 Benchmarks
 
 Details of all benchmarks can be found in *artifact/util/benchmark.py*, including their names and jar paths for analysis.
-
-[**Update:**] the details of benchmarks, including the LOC(line of code), reachable methods and reachable method invocations can be found in *artifact/benchmarks/benchmark_details.csv*.
 ## 2. Getting Started Guide
 
 ### 2.1 Directory Structure
