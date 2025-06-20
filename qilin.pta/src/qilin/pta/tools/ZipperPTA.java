@@ -73,6 +73,7 @@ public class ZipperPTA extends StagedPTA {
         Main.run(prePTA, PCMs);
         zipperTimer.stop();
         System.out.println(zipperTimer);
+        System.out.println("####HeuristicTime:" + zipperTimer.elapsedStr());
         extraStats();
     }
 

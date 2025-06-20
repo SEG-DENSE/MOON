@@ -100,7 +100,7 @@ For all 30 benchmarks.
 ##### MOONu
 ```shell
 cd artifact
-python run.py {benchmark_name} {sensitivity} -print -cd -cda=MOONu
+python run.py {benchmark_name} {sensitivity} -print -cd -cda=MOONb
 ```
 
 - Sensitivities: *2o* and *3o*.  

@@ -54,22 +54,20 @@ public class MatchObjCollector {
     }
 
     public Set<AllocNode> getMatchedObjs() {
-
-        System.out.println("#WrapContainer: " + (MoonConfig.enableWrapperContainer ? "Enabled" : "Disabled"));
-        System.out.println("#AllocatorContainer: " + (MoonConfig.enableAllocatorContainer ? "Enabled" : "Disabled"));
+        System.out.println("#EnableRecursive: " + (MoonConfig.enableRecursive ? "Enabled" : "Disabled"));
         utilizePreHSObjs();
 
         Graph<AllocNode> containerGraph = buildContainerGraph();
         innerContainers = retainBoxCanBeSeperated(innerContainers, "#Inner");
 
-        if(MoonConfig.enableWrapperContainer){
+        if(MoonConfig.enableRecursive){
             collectWrapperContainersForContainee(containerGraph, innerContainers);
             wrapperContainers = retainBoxCanBeSeperated(wrapperContainers, "#WrapperOfInner");
         }
 
         if (maxMatchLayer == 1) {
         } else if (maxMatchLayer == 2) {
-            if(MoonConfig.enableAllocatorContainer) {
+            if(MoonConfig.enableRecursive) {
                 collectAllocatorContainersFor3obj();
                 allocatorContainers = retainBoxCanBeSeperated(allocatorContainers, "#Allocator");
                 collectWrapperContainersForContainee(containerGraph, allocatorContainers);
@@ -92,12 +90,8 @@ public class MatchObjCollector {
         }
 
 
-        System.out.println("#Unconditional: " + innerContainers.size());
-        System.out.println("#Heap-Conditional: " + wrapperContainers.size());
-        System.out.println("#Field-Conditional: " + allocatorContainers.size());
-        System.out.println("#Total Precision-Relevant objs: " + ret.size());
-
-
+        System.out.println("####Base: " + innerContainers.size());
+        System.out.println("####Recursive: " + (wrapperContainers.size()+ allocatorContainers.size()));
 
         return ret;
     }

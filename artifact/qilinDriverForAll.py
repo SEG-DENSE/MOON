@@ -2,13 +2,12 @@ import os
 import subprocess
 from util.benchmark import BENCHMARKS
 from moonConfig import unscalable
-
+from helper import save_to_csv
 dir_name = "result"
 if not os.path.exists(dir_name):
     os.makedirs(dir_name)
 else:
     input(f"{dir_name} exists, press any key to confirm to override results in it.")
-
 
 
 def runCommand(command, output_file):
@@ -18,18 +17,22 @@ def runCommand(command, output_file):
 run = 0
 for idx, app in enumerate(BENCHMARKS):
     for sens in ["ci", "csc"]:
-            print(f"current app: {app}, index: {idx}/{len(BENCHMARKS)}, sens: {sens}")
-            command = f"python run.py {sens} {app} -print"
-            file_path = f"./{dir_name}/{app}_{sens}.txt"
-            with open(file_path, "w") as output_file:
-                runCommand(command, output_file)
+        print(f"current app: {app}, index: {idx}/{len(BENCHMARKS)}, sens: {sens}")
+        command = f"python run.py {sens} {app} -print"
+        file_path = f"./{dir_name}/{app}_{sens}.csv"
+
+        result = subprocess.run(command, shell=True, capture_output=True, text=True)
+        filtered_lines = [
+            line for line in result.stdout.splitlines() if line.startswith("####")
+        ]
+        save_to_csv(file_path, filtered_lines)
     for sens in [ "2o", "3o"]: # 
         for algo in ["PLAIN", "MOON", "ZIPPER", "CONCH",  "DEBLOATERX"]: # 
             print(f"current app: {app}, index: {idx}/{len(BENCHMARKS)}, algo: {algo}, sens: {sens}")
             if (app, algo, sens, None) in unscalable:
                 continue
             run += 1
-            file_path = f"./{dir_name}/{app}_{algo}_{sens}.txt"
+            file_path = f"./{dir_name}/{app}_{algo}_{sens}.csv"
 
             command = ""
             if algo == "PLAIN":
@@ -39,5 +42,8 @@ for idx, app in enumerate(BENCHMARKS):
             else:
                 command = f"python run.py {sens} {app} -print -cd -cda={algo}"
 
-            with open(file_path, "w") as output_file:
-                runCommand(command, output_file)
+            result = subprocess.run(
+                command, shell=True, capture_output=True, text=True
+            )
+            filtered_lines = [line for line in result.stdout.splitlines() if line.startswith("####")]
+            save_to_csv(file_path, filtered_lines)

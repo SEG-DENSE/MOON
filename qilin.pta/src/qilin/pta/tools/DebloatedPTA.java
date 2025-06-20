@@ -44,7 +44,7 @@ import java.util.*;
  * */
 public class DebloatedPTA extends StagedPTA {
     public enum DebloatApproach {
-        CONCH, DEBLOATERX, COLLECTION, MOON, MOONu, MOONuh, MOONuf
+        CONCH, DEBLOATERX, COLLECTION, MOON, MOONb
     }
 
     protected BasePTA basePTA;
@@ -91,6 +91,7 @@ public class DebloatedPTA extends StagedPTA {
             System.out.println();
             conchTimer.stop();
             System.out.println(conchTimer);
+            System.out.println("####HeuristicTime:" + conchTimer.elapsedStr());
         } else if (debloatApproach == DebloatApproach.DEBLOATERX) {
             Stopwatch debloaterXTimer = Stopwatch.newAndStart("DebloaterX");
             DebloaterX debloaterX = new DebloaterX(prePTA);
@@ -99,10 +100,12 @@ public class DebloatedPTA extends StagedPTA {
             for (AllocNode obj : mCtxDepHeaps) {
                 this.ctxDepHeaps.add(obj.getNewExpr());
             }
-
+            System.out.println("####CSHeaps:" + this.ctxDepHeaps.size());
+            System.out.println("####AllHeaps:" + prePTA.getPag().getAllocNodes().size());
             System.out.println();
             debloaterXTimer.stop();
             System.out.println(debloaterXTimer);
+            System.out.println("####HeuristicTime:" + debloaterXTimer.elapsedStr());
             // stat OAG reductions
             OAG oag = new OAG(prePTA);
             oag.build();
@@ -114,36 +117,30 @@ public class DebloatedPTA extends StagedPTA {
         }
         else if(debloatApproach.toString().startsWith("MOON")){
 
-            Stopwatch unzipperTIMER = Stopwatch.newAndStart("MOON");
+            Stopwatch moonTimer = Stopwatch.newAndStart("MOON");
             int k = Integer.parseInt(PTAConfig.v().getPtaConfig().ptaName.substring(0,1));
-            if(debloatApproach == DebloatApproach.MOONu){
-                MoonConfig.enableAllocatorContainer = false;
-                MoonConfig.enableWrapperContainer = false;
-            } else if (debloatApproach == DebloatApproach.MOONuf) {
-                MoonConfig.enableWrapperContainer = false;
-                MoonConfig.enableAllocatorContainer = true;
-            }else if (debloatApproach == DebloatApproach.MOONuh) {
-                MoonConfig.enableAllocatorContainer = false;
-                MoonConfig.enableWrapperContainer = true;
-            }else{
-                MoonConfig.enableAllocatorContainer = true;
-                MoonConfig.enableWrapperContainer = true;
+            if(debloatApproach == DebloatApproach.MOONb){
+                MoonConfig.enableRecursive = false;
+            }
+            else{
+                MoonConfig.enableRecursive = true;
             }
 
             Moon unzipper = new Moon(prePTA, k - 1);
-            Set<AllocNode> newunzipperCtxDep = unzipper.getCtxDepHeaps();
+            Set<AllocNode> moonCtxDep = unzipper.getCtxDepHeaps();
             System.out.println();
-            unzipperTIMER.stop();
-            System.out.println(unzipperTIMER);
-
-            Set<AllocNode> hsObjs = newunzipperCtxDep;
-            for (AllocNode obj : hsObjs) {
+            moonTimer.stop();
+            System.out.println(moonTimer);
+            System.out.println("####HeuristicTime:" + moonTimer.elapsedStr());
+            for (AllocNode obj : moonCtxDep) {
                 this.ctxDepHeaps.add(obj.getNewExpr());
             }
+            System.out.println("####CSHeaps:" + this.ctxDepHeaps.size());
+            System.out.println("####AllHeaps:" + prePTA.getPag().getAllocNodes().size());
             // stat OAG reductions
             OAG oag = new OAG(prePTA);
             oag.build();
-            OAG doag1 = new DebloatedOAG(prePTA, hsObjs);
+            OAG doag1 = new DebloatedOAG(prePTA, moonCtxDep);
             doag1.build();
             System.out.println("OAG #node:" + oag.nodeSize() + "; #edge:" + oag.edgeSize());
             System.out.println("MOON OAG #node:" + doag1.nodeSize() + "; #edge:" + doag1.edgeSize());

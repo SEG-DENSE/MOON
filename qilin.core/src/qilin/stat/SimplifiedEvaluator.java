@@ -49,11 +49,10 @@ public class SimplifiedEvaluator implements IEvaluator {
     @Override
     public void end() {
         stopwatch.stop();
-        System.out.println("Time (sec):" + String.valueOf(((double) stopwatch.elapsed())));
-        exporter.collectMetric("Time (sec):", String.valueOf(((double) stopwatch.elapsed())));
-        exporter.collectMetric("#Reachable Method (CI):", String.valueOf(pta.getNakedReachableMethods().size() - 1));
+        exporter.collectMetric("####T:", String.valueOf(((double) stopwatch.elapsed())));
+        exporter.collectMetric("####RM:", String.valueOf(pta.getNakedReachableMethods().size() - 1));
         CallGraph ciCallGraph = pta.getCallGraph();
-        exporter.collectMetric("#Call Edge(CI):", String.valueOf(ciCallGraph.size() - FakeMainFactory.implicitCallEdges));
+        exporter.collectMetric("####CE:", String.valueOf(ciCallGraph.size() - FakeMainFactory.implicitCallEdges));
         CallGraph callGraph = pta.getCallGraph();
 
         // loop over all reachable method's statement to find casts, local
@@ -111,8 +110,8 @@ public class SimplifiedEvaluator implements IEvaluator {
         }
         AliasStat aliasStat = new AliasStat(pta);
 //        aliasStat.aliasesProcessing();
-        exporter.collectMetric("#May Fail Cast (Total):", String.valueOf(totalCastsMayFail));
-        exporter.collectMetric("#Virtual Call Site(Polymorphic):", String.valueOf(totalPolyCalls));
+        exporter.collectMetric("####MFC:", String.valueOf(totalCastsMayFail));
+        exporter.collectMetric("####PCS:", String.valueOf(totalPolyCalls));
         exporter.collectMetric("#Total method calls:", String.valueOf(methodCalls));
 //        exporter.collectMetric("#globalAlias_incstst:", String.valueOf(aliasStat.getGlobalAliasesIncludingStSt()));
         ptsStat();
