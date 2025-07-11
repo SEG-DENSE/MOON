@@ -1,11 +1,20 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 
 import os, sys, shutil
-
+import time
 assert sys.version_info >= (
     3,
     5,
 ), "Python version does not meet the minimum requirements, i.e., >= 3.5"
+
+# run which python to make sure the possible error due to python has not been linked to python3.
+# expected: the script can be run with python
+if sys.executable.endswith("python3"):
+    print(
+        "Warning: You are running this script with python3.\n"
+        "Please make sure the python command is linked to python3 in your system to avoid unexpected errors."
+    )
+    time.sleep(3)
 
 import qilin as pta
 from util.opt import *
@@ -142,7 +151,7 @@ def runPTA(analysis, bm, OPTIONSTYLE):
         cmd += " > " + outputFile
     cmd += " -jre=" + JREVERSION[bm]
     print(cmd)
-    pta.runPointsToAnalysis(cmd.split())
+    pta.runPointsToAnalysis(cmd.split(), outputFile)
 
 
 OPTIONMESSAGE = (

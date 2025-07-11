@@ -252,7 +252,13 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        mainRun(args);
+        try{
+            mainRun(args);
+        }catch (OutOfMemoryError e){
+            e.printStackTrace();
+            System.exit(1);
+        }
+
         // mainCG(args);
     }
 }

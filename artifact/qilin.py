@@ -39,7 +39,7 @@ OPTIONMESSAGE = 'The valid OPTIONs are:\n' \
                 + option('-ptahelp', 'print help info for pointer analysis.')
 
 
-def runPointsToAnalysis(args):
+def runPointsToAnalysis(args, outputFile):
     global XMX, timeout
     outputFile = None
     if '-help' in args or '-h' in args:
@@ -84,8 +84,25 @@ def runPointsToAnalysis(args):
 
     runCommmand = runJava_cmd % (XMX, ' '.join(args))
     print(runCommmand)
-    if outputFile is None:
-        subprocess.run(runCommmand.split(' '), timeout=timeout)
-    else:
-        with open(outputFile, "w") as outfile:
-            subprocess.run(runCommmand.split(' '), stdout=outfile, stderr=subprocess.STDOUT, timeout=timeout)
+    
+    
+
+
+    try:
+        if outputFile is None:
+            subprocess.run(runCommmand.split(' '), timeout=timeout, check=True)
+        else:
+            with open(outputFile, "w") as outfile:
+                subprocess.run(runCommmand.split(' '), stdout=outfile, stderr=subprocess.STDOUT, timeout=timeout, check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Error: PTA failed with detailed logs in file {outputFile}")
+        exit(1)
+    except subprocess.TimeoutExpired:
+        print(f"Error: PTA timed out with detailed logs in file {outputFile}")
+        exit(1)
+
+    # if outputFile is None:
+    #     subprocess.run(runCommmand.split(' '), timeout=timeout)
+    # else:
+    #     with open(outputFile, "w") as outfile:
+    #         subprocess.run(runCommmand.split(' '), stdout=outfile, stderr=subprocess.STDOUT, timeout=timeout)
