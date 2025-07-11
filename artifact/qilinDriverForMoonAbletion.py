@@ -9,9 +9,6 @@ else:
     input(f"{dir_name} exists, press any key to confirm to override results in it.")
 
 
-
-
-
 run = 0
 for idx, app in enumerate(BENCHMARKS):
     for algo in ["MOONb"]:
@@ -25,5 +22,10 @@ for idx, app in enumerate(BENCHMARKS):
             result = subprocess.run(
                 command, shell=True, capture_output=True, text=True
             )
+                
+            if result.returncode != 0:
+                print(f"Error running command: {command}")
+                print(result.stdout)
+                continue
             filtered_lines = [line for line in result.stdout.splitlines() if line.startswith("####")]
             save_to_csv(file_path, filtered_lines)
