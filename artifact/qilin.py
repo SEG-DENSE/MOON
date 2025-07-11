@@ -85,12 +85,10 @@ def runPointsToAnalysis(args, outputFile):
     runCommmand = runJava_cmd % (XMX, ' '.join(args))
     print(runCommmand)
     
-    
-
 
     try:
         if outputFile is None:
-            subprocess.run(runCommmand.split(' '), timeout=timeout, check=True)
+            subprocess.run(runCommmand.split(' '), timeout=timeout, stderr=subprocess.STDOUT, check=True)
         else:
             with open(outputFile, "w") as outfile:
                 subprocess.run(runCommmand.split(' '), stdout=outfile, stderr=subprocess.STDOUT, timeout=timeout, check=True)

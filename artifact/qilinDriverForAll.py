@@ -10,10 +10,12 @@ else:
     input(f"{dir_name} exists, press any key to confirm to override results in it.")
 
 
-def runCommand(command, output_file):
-    print(command)
-    subprocess.run(command, shell=True, stdout=output_file, stderr=output_file)
-    pass
+def runCommand(command):
+    result = subprocess.run(command, shell=True, capture_output=True, text=True)
+    if result.returncode != 0:
+        print(f"Error running command: {command}")
+        print(result.stdout)
+    return result
 run = 0
 for idx, app in enumerate(BENCHMARKS):
     for sens in ["ci", "csc"]:
@@ -21,7 +23,9 @@ for idx, app in enumerate(BENCHMARKS):
         command = f"python run.py {sens} {app} -print"
         file_path = f"./{dir_name}/{app}_{sens}.csv"
 
-        result = subprocess.run(command, shell=True, capture_output=True, text=True)
+        result = runCommand(command)
+        if result.returncode != 0:
+            continue
         filtered_lines = [
             line for line in result.stdout.splitlines() if line.startswith("####")
         ]
@@ -42,8 +46,9 @@ for idx, app in enumerate(BENCHMARKS):
             else:
                 command = f"python run.py {sens} {app} -print -cd -cda={algo}"
 
-            result = subprocess.run(
-                command, shell=True, capture_output=True, text=True
-            )
+            result = runCommand(command)
+            if result.returncode != 0:
+                continue
+            
             filtered_lines = [line for line in result.stdout.splitlines() if line.startswith("####")]
             save_to_csv(file_path, filtered_lines)
