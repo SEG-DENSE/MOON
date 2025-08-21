@@ -1,9 +1,11 @@
 # Towards a Theoretically-Backed and Practical Framework for Selective Object-Sensitive Pointer Analysis (Artifact Document)
 
 ## 0. Update
-<span style="color:red"><b>[UPDATE1:]</b></span> Details of the benchmarks—including LOC, Functions and Calls—can be found in updatedData/benchmark_details.csv.
+<span style="color:red"><b>[UPDATE1:]</b></span> The document for artifact evaluation is available in supplementalMaterials/OOPSLA'25_Round2_Artifact_Evaluation_Document.pdf. It contains detailed instructions for running the artifact, including all commands and expected outputs.
 
-<span style="color:red"><b>[UPDATE2:]</b></span> Experimental results for all stages of the analysis are available in updatedData/experiment_results.pdf, which includes the three updated tables.
+<span style="color:red"><b>[UPDATE2:]</b></span> The supplemantal material is available in supplementalMaterials/Supplemental-Material.pdf. It includes the formal proofs and two detailed experimental tables.
+
+
 ## 1. Introduction
 
 This artifact supports reproducing the results of all research questions (RQ1-RQ4) in Section 6 of our paper, including all associated tables and figures.

@@ -26,16 +26,6 @@ public record ParameterIndex(boolean isThis, int index) {
         return realParameters.computeIfAbsent(index, i -> new ParameterIndex(false, i));
     }
 
-    public static int GetReturnVariableIndexDEPRECATED(LocalVarNode returnVar) {
-        // "This method seems less meaningful in qilin than tai-e, since in qilin, there is a unified return var connected all the return vars.return 0;
-//        if(returnVar.getMethod().isAbstract()) return -1;
-//        if(returnVar.isReturn()) return 0;
-//        return -1;
-        if(true){
-            throw new RuntimeException("this method should not be used in Qilin, use nodeFactory.isRealReturnVar(returnVar) instead.");
-        }
-        return -1;
-    }
 
     @Nullable
     public static Value getCorrespondingArgument(Edge edge, ParameterIndex parameterIndex){

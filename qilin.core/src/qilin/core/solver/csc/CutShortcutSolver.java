@@ -225,7 +225,6 @@ public class CutShortcutSolver extends Propagator {
 
             MethodPAG mpag = pag.getMethodPAG(method);
             addToPAG(mpag, momc.context());
-            // !FIXME in a context-sensitive pointer analysis, clinits in a method maybe added multiple times.
             if (CoreConfig.v().getPtaConfig().clinitMode == CoreConfig.ClinitMode.ONFLY) {
                 // add <clinit> find in the method to reachableMethods.
                 Iterator<SootMethod> it = mpag.triggeredClinits();
@@ -260,7 +259,7 @@ public class CutShortcutSolver extends Propagator {
                         recNode = (VarNode) pta.parameterize(recNode, m.context());
                         if (ie instanceof DynamicInvokeExpr) {
                             // !TODO dynamicInvoke is provided in JDK after Java 7.
-                            // currently, PTA does not handle dynamicInvokeExpr.
+                            // currently, Qilin does not handle dynamicInvokeExpr.
                         } else {
                             cgb.addStaticEdge(m, s, tgt, Edge.ieToKind(ie));
                         }
